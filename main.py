@@ -2,11 +2,24 @@
 Purpose: Execute the objetive of the project.
 """
 
+import pandas as pd
+
 from read_media import get_audio_addrs
 from algorithms import convert_to_mp3, convert_to_flac, convert_to_aac
 from algorithms import calculate_rmse, calculate_psnr, calculate_compression_rate
 
 import soundfile as sf
+
+id_vals = []
+rmse_vals = []
+psnr_vals = []
+cr_vals = []
+
+def add_data(id_val, rmse_val, psnr_val, cr_val):
+    id_vals.append(id_val)
+    rmse_vals.append(rmse_val)
+    psnr_vals.append(psnr_val)
+    cr_vals.append(cr_val)
 
 # Prepare path to each wav file
 dataset_path = "./data/"
@@ -41,6 +54,7 @@ for i in range(len(wav_files)):
     print('Root Mean Square Error:', rmse)
     print('Peak Signal Noise Ratio:', psnr)
     print('Compression Rate:', compression_rate)
+    add_data(i, rmse, psnr, compression_rate)
 
     # Calculate error measure for flac file
     rmse = calculate_rmse(audio1, audio3)
@@ -51,6 +65,7 @@ for i in range(len(wav_files)):
     print('Root Mean Square Error:', rmse)
     print('Peak Signal Noise Ratio:', psnr)
     print('Compression Rate:', compression_rate)
+    add_data(i, rmse, psnr, compression_rate)
 
     # # Calculate error measure for aac file
     # rmse = calculate_rmse(audio1, audio4)
@@ -61,3 +76,7 @@ for i in range(len(wav_files)):
     # print('Root Mean Square Error:', rmse)
     # print('Peak Signal Noise Ratio:', psnr)
     # print('Compression Rate:', compression_rate)
+    # add_data(i, rmse, psnr, compression_rate)
+
+df = pd.DataFrame({'id': id_vals, 'rmse': rmse_vals, 'psnr': psnr_vals, 'compression_rate': cr_vals})
+df.to_csv("./csv_results/results_dataframe.csv", index=False)
