@@ -9,11 +9,14 @@ from algorithms import convert_to_mp3, convert_to_flac, convert_to_aac
 from algorithms import calculate_rmse, calculate_psnr, calculate_compression_rate
 
 import soundfile as sf
+import time
 
 id_vals = []
 rmse_vals = []
 psnr_vals = []
 cr_vals = []
+time_vals = []
+format_vals = []
 
 def add_data(id_val, rmse_val, psnr_val, cr_val):
     id_vals.append(id_val)
@@ -28,9 +31,21 @@ wav_files = get_audio_addrs(dataset_path, '.wav')
 
 # Apply each compression algorithm to each audio file
 for wav_file in wav_files:
+    start_time = time.time()
     convert_to_mp3(wav_file)
+    execution_time = time.time() - start_time
+    time_vals.append(execution_time)
+
+    start_time = time.time()
     convert_to_flac(wav_file)
+    execution_time = time.time() - start_time
+    time_vals.append(execution_time)
+
+    start_time = time.time()
     convert_to_aac(wav_file)
+    execution_time = time.time() - start_time
+    time_vals.append(execution_time)
+
 
 # Prepare path to each mp3, flac, aac file
 mp3_files = get_audio_addrs(results_path, '.mp3')
@@ -54,7 +69,7 @@ for i in range(len(wav_files)):
     print('Root Mean Square Error:', rmse)
     print('Peak Signal Noise Ratio:', psnr)
     print('Compression Rate:', compression_rate)
-    add_data(i, rmse, psnr, compression_rate)
+    add_data(i, rmse, psnr, compression_rate, 'mp3')
 
     # Calculate error measure for flac file
     rmse = calculate_rmse(audio1, audio3)
@@ -65,7 +80,7 @@ for i in range(len(wav_files)):
     print('Root Mean Square Error:', rmse)
     print('Peak Signal Noise Ratio:', psnr)
     print('Compression Rate:', compression_rate)
-    add_data(i, rmse, psnr, compression_rate)
+    add_data(i, rmse, psnr, compression_rate, 'flac')
 
     # # Calculate error measure for aac file
     # rmse = calculate_rmse(audio1, audio4)
@@ -76,7 +91,7 @@ for i in range(len(wav_files)):
     # print('Root Mean Square Error:', rmse)
     # print('Peak Signal Noise Ratio:', psnr)
     # print('Compression Rate:', compression_rate)
-    # add_data(i, rmse, psnr, compression_rate)
+    # add_data(i, rmse, psnr, compression_rate, 'aac')
 
-df = pd.DataFrame({'id': id_vals, 'rmse': rmse_vals, 'psnr': psnr_vals, 'compression_rate': cr_vals})
+df = pd.DataFrame({'id': id_vals, 'rmse': rmse_vals, 'psnr': psnr_vals, 'compression_rate': cr_vals, 'format': format_vals, 'runtime': time_vals})
 df.to_csv("./csv_results/results_dataframe.csv", index=False)
