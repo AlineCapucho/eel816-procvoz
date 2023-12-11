@@ -3,13 +3,9 @@ Purpose: Read media. Where media can be image or video.
 """
 
 import os
-import numpy as np
-import matplotlib.pyplot as plt
 
 def get_audio_addrs(dataset_path, audio_format):
     audio_addrs = []
-
-    # Path to the folder where the images are stored
 
     # List all files in the folder
     files = os.listdir(dataset_path)
