@@ -6,32 +6,59 @@ from pydub import AudioSegment
 import os
 import numpy as np
 
-# Function to convert WAV file to MP3
-def convert_to_mp3(wav_file):
-    # Read the WAV file
-    audio = AudioSegment.from_wav(wav_file)
+# Get file extension
+def get_file_extension(file_path):
+    _, extension = os.path.splitext(file_path)
     
-    output_file = './results/' + wav_file.split("/")[2][:-4] + '.mp3'
+    return extension[1:]
+
+# Function to convert WAV file to MP3
+def convert_to_mp3(file_path, output_file = ''):
+    format = get_file_extension(file_path)
+
+    # Read the file
+    audio = AudioSegment.from_file(file_path, format)
+
+    if (not output_file):
+        output_file = './results/' + file_path.split("/")[2][:-4] + '.mp3'
+    else:
+        if (output_file[-4:] != '.mp3'):
+            output_file += '.mp3'
+
     # Set the output format to MP3
     audio.export(output_file, format='mp3')
     print(f'Conversion to MP3 completed: {output_file}')
 
 # Function to convert WAV file to FLAC
-def convert_to_flac(wav_file):
-    # Read the WAV file
-    audio = AudioSegment.from_wav(wav_file)
+def convert_to_flac(file_path, output_file = ''):
+    format = get_file_extension(file_path)
+
+    # Read the file
+    audio = AudioSegment.from_file(file_path, format)
     
-    output_file = './results/' + wav_file.split("/")[2][:-4] + '.flac'
+    if (not output_file):
+        output_file = './results/' + file_path.split("/")[2][:-4] + '.flac'
+    else:
+        if (output_file[-5:] != '.flac'):
+            output_file += '.flac'
+    
     # Set the output format to FLAC
     audio.export(output_file, format='flac')
     print(f'Conversion to FLAC completed: {output_file}')
 
 # Function to convert WAV file to AAC
-def convert_to_aac(wav_file):
-    # Read the WAV file
-    audio = AudioSegment.from_wav(wav_file)
+def convert_to_aac(file_path, output_file = ''):
+    format = get_file_extension(file_path)
+
+    # Read the file
+    audio = AudioSegment.from_file(file_path, format)
     
-    output_file = './results/' + wav_file.split("/")[2][:-4] + '.aac'
+    if (not output_file):
+        output_file = './results/' + file_path.split("/")[2][:-4] + '.aac'
+    else:
+        if (output_file[-4:] != '.aac'):
+            output_file += '.aac'
+    
     # Set the output format to AAC
     # audio.export(output_file, format='aac')
     audio.export(output_file, format='adts')
