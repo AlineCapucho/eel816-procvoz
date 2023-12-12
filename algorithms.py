@@ -12,7 +12,7 @@ def get_file_extension(file_path):
     
     return extension[1:]
 
-# Function to convert WAV file to MP3
+# Function to convert audio file to MP3
 def convert_to_mp3(file_path, output_file = ''):
     format = get_file_extension(file_path)
 
@@ -29,7 +29,7 @@ def convert_to_mp3(file_path, output_file = ''):
     audio.export(output_file, format='mp3')
     print(f'Conversion to MP3 completed: {output_file}')
 
-# Function to convert WAV file to FLAC
+# Function to convert audio file to FLAC
 def convert_to_flac(file_path, output_file = ''):
     format = get_file_extension(file_path)
 
@@ -46,7 +46,7 @@ def convert_to_flac(file_path, output_file = ''):
     audio.export(output_file, format='flac')
     print(f'Conversion to FLAC completed: {output_file}')
 
-# Function to convert WAV file to AAC
+# Function to convert audio file to AAC
 def convert_to_aac(file_path, output_file = ''):
     format = get_file_extension(file_path)
 
@@ -63,6 +63,22 @@ def convert_to_aac(file_path, output_file = ''):
     # audio.export(output_file, format='aac')
     audio.export(output_file, format='adts')
     print(f'Conversion to AAC completed: {output_file}')
+
+# Function to audio file to WAV
+def convert_to_wav(file_path, output_file = ''):
+    format = get_file_extension(file_path)
+
+    # Read the file
+    audio = AudioSegment.from_file(file_path, format)
+    
+    if (not output_file):
+        output_file = './results/' + file_path.split("/")[2][:-4] + '.wav'
+    else:
+        if (output_file[-4:] != '.wav'):
+            output_file += '.wav'
+    
+    audio.export(output_file, format='wav')
+    print(f'Conversion to WAV completed: {output_file}')
 
 def calculate_rmse(audio1, audio2):
     mse = np.mean((audio1 - audio2) ** 2)

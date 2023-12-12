@@ -1,6 +1,6 @@
 import os
 import PySimpleGUI as sg
-from algorithms import convert_to_mp3, convert_to_flac, convert_to_aac
+from algorithms import convert_to_mp3, convert_to_flac, convert_to_aac, convert_to_wav
 from pydub import AudioSegment
 from pydub.playback import play
 
@@ -9,13 +9,14 @@ def play_audio(file_path):
     audio = audio[:10 * 1000]
     play(audio)
 
-file_formats = {'MP3': 'mp3', 'AAC': 'aac', 'FLAC': 'flac'}
+file_formats = {'MP3': 'mp3', 'AAC': 'aac', 'FLAC': 'flac', 'WAV': 'wav'}
 
 sg.theme('DarkTeal12')
 
 layout = [
     [sg.Text("Selecione um arquivo:")],
-    [sg.InputText(key="input_path", enable_events=True, visible=False), sg.FileBrowse(button_text="Buscar Arquivo", file_types=(("Audio Files", "*.wav;*.mp3;*.aac;*.flac"),))],
+    [sg.InputText(key="input_path", enable_events=True, visible=False), 
+     sg.FileBrowse(button_text="Buscar Arquivo", file_types=(("Audio Files", "*.wav;*.mp3;*.aac;*.flac"),))],
     [sg.Text("Arquivo:", key="selected_file_text")],
     [sg.Text("Formato novo:"), sg.Combo(values=list(file_formats.keys()), key="output_format", default_value="MP3")],
     [sg.Button("Converter"), sg.Button("Amostra do Áudio Convertido"), sg.Button("Fechar")],
@@ -50,6 +51,8 @@ while True:
                 convert_to_aac(input_path, output_path)
             elif output_format == 'FLAC':
                 convert_to_flac(input_path, output_path)
+            elif output_format == 'WAV':
+                convert_to_wav(input_path, output_path)
             sg.popup_ok(f"Conversão completa. Arquivo salvo:\n{output_path}", keep_on_top=True)
             converted_file_path = output_path
 
